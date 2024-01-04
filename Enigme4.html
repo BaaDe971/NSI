@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Énigme 4: Association</title>
+    <style>
+        /* Styles CSS existants */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e8f0fe;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        h2 {
+            color: #007bff;
+        }
+        select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .feedback, .timer {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .feedback {
+            color: #ff0000;
+        }
+        .timer {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Énigme 4: Association</h2>
+        <p>Associez ces inventeurs à leurs créations :</p>
+        <form id="associationForm">
+            <label for="vintonCerf">1) Vinton Cerf:</label>
+            <select id="vintonCerf">
+                <option value="">--Choisissez une option--</option>
+                <option value="Mosaic">a) Mosaic</option>
+                <option value="Circuit intégré">b) Circuit intégré</option>
+                <option value="TCP/IP">c) TCP/IP</option>
+            </select><br><br>
+
+            <label for="jackKilby">2) Jack Kilby:</label>
+            <select id="jackKilby">
+                <option value="">--Choisissez une option--</option>
+                <option value="Mosaic">a) Mosaic</option>
+                <option value="Circuit intégré">b) Circuit intégré</option>
+                <option value="TCP/IP">c) TCP/IP</option>
+            </select><br><br>
+
+            <label for="marcAndreessen">3) Marc Andreessen:</label>
+            <select id="marcAndreessen">
+                <option value="">--Choisissez une option--</option>
+                <option value="Mosaic">a) Mosaic</option>
+                <option value="Circuit intégré">b) Circuit intégré</option>
+                <option value="TCP/IP">c) TCP/IP</option>
+            </select><br><br>
+        </form>
+        <button onclick="verifierReponse()">Soumettre</button>
+        <div id="feedback" class="feedback"></div>
+        <div id="hint" style="display:none; color: blue;">Indice: Vinton Cerf est souvent appelé l'un des "pères de l'Internet"
+		Jack Kilby a contribué à une invention cruciale dans les appareils électroniques modernes.arc Andreessen a développé un outil essentiel pour naviguer sur le web.</div>
+        <div id="timer" class="timer"></div>
+        <script>
+            var totalTime = localStorage.getItem('remainingTime') ? parseInt(localStorage.getItem('remainingTime'), 10) : 300;
+            var timerDiv = document.getElementById('timer');
+            var timerInterval = setInterval(updateTimer, 1000);
+            var errorCount = 0; // Compteur d'erreurs
+
+            function updateTimer() {
+                var minutes = parseInt(totalTime / 60, 10);
+                var seconds = parseInt(totalTime % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                timerDiv.textContent = minutes + ":" + seconds;
+
+                if (--totalTime < 0) {
+                    clearInterval(timerInterval);
+                    localStorage.removeItem('remainingTime');
+                    window.location.href = 'index.html';
+                } else {
+                    localStorage.setItem('remainingTime', totalTime);
+                }
+            }
+
+            function verifierReponse() {
+                var reponse1 = document.getElementById('vintonCerf').value;
+                var reponse2 = document.getElementById('jackKilby').value;
+                var reponse3 = document.getElementById('marcAndreessen').value;
+                var feedback = document.getElementById('feedback');
+                var hint = document.getElementById('hint');
+
+                if (reponse1 === "TCP/IP" && reponse2 === "Circuit intégré" && reponse3 === "Mosaic") {
+                    clearInterval(timerInterval);
+                    totalTime -= 30; // Réduction du temps pour la prochaine énigme
+                    localStorage.setItem('remainingTime', totalTime);
+                    window.location.href = 'enigme5.html'; // Modifier le lien vers la prochaine énigme
+                } else {
+                    totalTime -= 10; // Réduction du temps pour chaque erreur
+                    localStorage.setItem('remainingTime', totalTime);
+                    errorCount++; // Incrémentation du compteur d'erreurs
+                    feedback.innerHTML = "Association incorrecte. Essayez encore. 😢";
+
+                    if (errorCount === 3) {
+                        hint.style.display = "block"; // Afficher l'indice après 3 erreurs
+                    }
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>

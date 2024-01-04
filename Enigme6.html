@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Énigme 6: Puzzle de Logique</title>
+    <style>
+        /* Styles CSS existants */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e8f0fe;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            margin-top: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .feedback, .timer {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .feedback {
+            color: #ff0000;
+        }
+        .timer {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Énigme 6: Puzzle de Logique</h2>
+        <p>"Si vous codez en Python, et que vous ajoutez 2 à x, où x est 3, que faites-vous?"</p>
+        <input type="text" id="reponse6">
+        <button onclick="verifierReponse()">Soumettre</button>
+        <div id="feedback" class="feedback"></div>
+        <div id="hint" style="display:none; color: blue;">Indice: Pensez simplement à une opération mathématique de base.</div>
+        <div id="timer" class="timer"></div>
+        <script>
+            var totalTime = localStorage.getItem('remainingTime') ? parseInt(localStorage.getItem('remainingTime'), 10) : 300;
+            var timerDiv = document.getElementById('timer');
+            var timerInterval = setInterval(updateTimer, 1000);
+            var errorCount = 0; // Compteur d'erreurs
+
+            function updateTimer() {
+                var minutes = parseInt(totalTime / 60, 10);
+                var seconds = parseInt(totalTime % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                timerDiv.textContent = minutes + ":" + seconds;
+
+                if (--totalTime < 0) {
+                    clearInterval(timerInterval);
+                    localStorage.removeItem('remainingTime');
+                    window.location.href = 'index.html'; // Redirection si le temps est écoulé
+                } else {
+                    localStorage.setItem('remainingTime', totalTime);
+                }
+            }
+
+            function verifierReponse() {
+                var reponse = document.getElementById('reponse6').value;
+                var feedback = document.getElementById('feedback');
+                var hint = document.getElementById('hint');
+
+                if (reponse.toLowerCase() === "5" || reponse.toLowerCase() === "cinq") {
+                    clearInterval(timerInterval);
+                    localStorage.removeItem('remainingTime');
+					window.location.href = 'PageDeFin.html';
+                    alert('Félicitations ! Vous avez résolu toutes les énigmes.');
+                    // Vous pouvez ajouter une redirection ici si nécessaire
+                } else {
+                    totalTime -= 10;
+                    localStorage.setItem('remainingTime', totalTime);
+                    errorCount++;
+                    feedback.innerHTML = "Réponse incorrecte. Essayez encore. 😢";
+
+                    if (errorCount === 3) {
+                        hint.style.display = "block";
+                    }
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>
+

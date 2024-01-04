@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Énigme 5: Chronologie</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e8f0fe;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 60%;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            width: 80%;
+            margin-top: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .feedback, .timer {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+        .feedback {
+            color: #ff0000;
+        }
+        .timer {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Énigme 5: Chronologie</h2>
+        <p>Mettez ces événements dans l'ordre chronologique : a) Fondation d'Apple, b) Création du World Wide Web, c) Lancement du premier iPhone.</p>
+        <input type="text" id="reponse5">
+        <button onclick="verifierReponse()">Soumettre</button>
+        <div id="feedback" class="feedback"></div>
+        <div id="hint" style="display:none; color: blue;">Indice: L'ordre va de l'ère des ordinateurs personnels à l'ère du web, puis à l'ère des smartphones.</div>
+        <div id="timer" class="timer"></div>
+        <script>
+            var totalTime = localStorage.getItem('remainingTime') ? parseInt(localStorage.getItem('remainingTime'), 10) : 300;
+            var timerDiv = document.getElementById('timer');
+            var timerInterval = setInterval(updateTimer, 1000);
+            var errorCount = 0; // Compteur d'erreurs
+
+            function updateTimer() {
+                var minutes = parseInt(totalTime / 60, 10);
+                var seconds = parseInt(totalTime % 60, 10);
+
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                timerDiv.textContent = minutes + ":" + seconds;
+
+                if (--totalTime < 0) {
+                    clearInterval(timerInterval);
+                    localStorage.removeItem('remainingTime');
+                    window.location.href = 'index.html';
+                } else {
+                    localStorage.setItem('remainingTime', totalTime);
+                }
+            }
+
+            function verifierReponse() {
+                var reponse = document.getElementById('reponse5').value;
+                var feedback = document.getElementById('feedback');
+                var hint = document.getElementById('hint');
+
+                if (reponse.toLowerCase() === "abc") {
+                    clearInterval(timerInterval);
+                    localStorage.setItem('remainingTime', totalTime);
+                    window.location.href = 'Enigme6.html'; // Redirection vers l'Énigme 6
+                } else {
+                    totalTime -= 10;
+                    localStorage.setItem('remainingTime', totalTime);
+                    errorCount++;
+                    feedback.innerHTML = "Ordre incorrect. Essayez encore. 😢";
+
+                    if (errorCount === 3) {
+                        hint.style.display = "block";
+                    }
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>
